@@ -1,2 +1,6 @@
-/node_modules
-package-lock.json
+# Client git-ignores:
+/client/node_modules
+/client/dist/
+/client/yarn.lock
+
+# Server git-ignores:
