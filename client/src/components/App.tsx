@@ -3,7 +3,18 @@ import "rbx/index.css";
 import { Section, Title, } from "rbx";
 import Searchbar from './Searchbar';
 
+interface Props {
+    listOfSyms: []
+}
+
 class App extends React.Component {
+	constructor(props: Props) {
+        super(props);
+        this.state = {
+            listOfSyms: []
+        }
+	}
+	
 	render() {
 		return (
 			<div>

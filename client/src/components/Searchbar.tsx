@@ -13,10 +13,10 @@ class Searchbar extends React.Component {
             searchQuery: ""
         };
     }
-    
-    // searchSymbol = () => {
-    //     console.log("SEARCH HAS BEEN PRESSED")
-    // };
+
+    searchSymbols() {
+        console.log("SEARCH HAS BEEN PRESSED");
+    }
 
 	render() {
 		return (
@@ -26,7 +26,7 @@ class Searchbar extends React.Component {
                         <Input type="search" size="large" placeholder="Search for a stock's symbol..." />
                     </Control>
                     <Control>
-                        <Button color="dark" size="large" onClick={console.log("SEARCH HAS BEEN PRESSED")}>Submit</Button>
+                        <Button color="dark" size="large" onClick={this.searchSymbols}>Submit</Button>
                     </Control>
                 </Field>
                 <Help>This searchbar uses the IEX to find any direct or close-matching results</Help>
