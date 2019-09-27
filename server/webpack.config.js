@@ -7,18 +7,18 @@ const isProd = process.env.NODE_ENV === 'production';
 const config = {
   target: "node",
   mode: isProd ? 'production' : 'development',
-  entry: './src/app.tsx',
+  entry: './src/app.ts',
   output: {
     path: resolve(__dirname, 'dist'),
     filename: 'app.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts?$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },

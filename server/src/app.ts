@@ -1,10 +1,11 @@
+import { Request, Response } from 'express';
 import iex_helper from'./iex_helper'
 import express from 'express';
 
 const app = express();
 const port = 8080; // default port to listen
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   iex_helper.make_IEX_API_call('https://api.iextrading.com/1.0/tops/last/')
   .then(response => {
       res.header('Access-Control-Allow-Origin', '*');
@@ -15,7 +16,7 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('/:sym', (req, res) => {
+app.get('/:sym', (req: Request, res: Response) => {
   let sym = req.params.sym;
   iex_helper.make_IEX_API_call('https://api.iextrading.com/1.0/tops/last?symbols=' + sym)
   .then(response => {

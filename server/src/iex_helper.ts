@@ -1,6 +1,6 @@
 import request from 'request'
 
-function make_IEX_API_call(url) {
+function make_IEX_API_call(url: string) {
     var options = {
         method: 'GET',
         url: url,
