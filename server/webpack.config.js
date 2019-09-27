@@ -1,16 +1,16 @@
 const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
 const config = {
-  target: "web",
+  target: "node",
   mode: isProd ? 'production' : 'development',
-  entry: './src/index.tsx',
+  entry: './src/app.tsx',
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: 'index.js',
+    filename: 'app.js',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -22,18 +22,9 @@ const config = {
         use: 'babel-loader',
         exclude: /node_modules/,
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'IEX App Client',
-      template: 'src/index.html',
-    }),
-  ]
+  externals: [nodeExternals()]
 };
 
 if (isProd) {
