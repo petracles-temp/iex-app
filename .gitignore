@@ -1,9 +1,11 @@
 # Client git-ignores:
+/client/.DS_Store
 /client/node_modules/
 /client/dist/
 /client/yarn.lock
 
 # Server git-ignores:
+/server/.DS_Store
 /server/node_modules/
 /server/dist/
 /server/yarn.lock

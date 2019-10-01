@@ -2,20 +2,21 @@ import React from 'react';
 import "rbx/index.css";
 import { Field, Control, Input, Button, Help } from "rbx";
 
-interface Props {
-    searchQuery: string
+interface MyProps {
+    searchQuery?: string;
 }
 
-class Searchbar extends React.Component {
-    constructor(props: Props) {
+interface MyState {
+    searchQuery?: string;
+}
+
+class Searchbar extends React.Component<MyProps, MyState> {
+    constructor(props: MyProps) {
         super(props);
         this.state = {
             searchQuery: ""
         };
-    }
-
-    searchSymbols() {
-        console.log("SEARCH HAS BEEN PRESSED");
+        this.fetchAllSymbols = this.fetchAllSymbols.bind(this);
     }
 
 	render() {
@@ -26,7 +27,7 @@ class Searchbar extends React.Component {
                         <Input type="search" size="large" placeholder="Search for a stock's symbol..." />
                     </Control>
                     <Control>
-                        <Button color="dark" size="large" onClick={this.searchSymbols}>Submit</Button>
+                        <Button color="dark" size="large" onClick={this.fetchAllSymbols}>Submit</Button>
                     </Control>
                 </Field>
                 <Help>This searchbar uses the IEX to find any direct or close-matching results</Help>

@@ -3,7 +3,7 @@ import iex_helper from'./iex_helper'
 import express from 'express';
 
 const app = express();
-const port = 8080; // default port to listen
+const port = 8081; // default port to listen
 
 app.get('/', (req: Request, res: Response) => {
   iex_helper.make_IEX_API_call('https://api.iextrading.com/1.0/tops/last/')
