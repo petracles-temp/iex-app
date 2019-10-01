@@ -1,49 +1,72 @@
 import React from 'react';
 import "rbx/index.css";
 import { Hero, Section, Container, Title, Field, Control, Input, Button, Help, Box, Column } from "rbx";
-// import Searchbar from './Searchbar';
+import Searchbar from './Searchbar';
 import Result from './Result';
 
 interface MyProps {
-    allStocks?: [];
-    lastCacheReset?: Date;
+	allStocks?: Map<string, number>,
+	results?: Result[];
+    lastCacheRefresh?: number;
 }
 
 interface MyState {
-    allStocks?: [];
-    lastCacheReset?: Date;
+	allStocks?: Map<string, number>,
+    results?: Result[];
+    lastCacheRefresh?: number;
 }
 
 class App extends React.Component<MyProps, MyState> {
 	constructor(props: MyProps) {
         super(props);
         this.state = {
-            allStocks: [],
-            lastCacheReset: new Date()
+			allStocks: new Map<string, number>(),
+            results: [],
+            lastCacheRefresh: 0
 		};
-		this.buildResult = this.buildResult.bind(this);
-        this.fetchAllStocks = this.fetchAllStocks.bind(this);
-	}
-
-	buildResult(value: string, key: number) {
-		return <Result symbol={key} price={value} />
+		this.fetchAllStocks = this.fetchAllStocks.bind(this);
+		this.fetchStocks = this.fetchStocks.bind(this);
+		
+		this.fetchAllStocks();
 	}
 
 	fetchAllStocks() {
-		console.log("SEARCH HAS BEEN PRESSED");
+		let allStocks: Map<string, number> = new Map<string, number>();
         fetch("http://localhost:8081/")
             .then(response => response.json())
             .then(data => {
-                let stocks = [];
                 for (let stock of JSON.parse(data)) {
-					stocks.push(<Result symbol={stock["symbol"]} price={stock["price"]} />)
-                }
-                this.setState({
-                    allStocks: stocks,
-                    lastCacheRefresh: Date.now()
-                });
+					allStocks.set(stock["symbol"], stock["price"])
+				}
+				this.setState({
+					allStocks: allStocks,
+					results: this.state.results,
+					lastCacheRefresh: Date.now()
+				});
 			})
-		console.log(this.state.allStocks);
+	}
+
+	fetchStocks(query: string) {
+		this.setState({
+			allStocks: this.state.allStocks,
+			results: [],
+			lastCacheRefresh: this.state.lastCacheRefresh
+		});
+
+		let results: Result[] = [];
+		fetch("http://localhost:8081/" + query)
+            .then(response => response.json())
+            .then(data => {
+                for (let stock of JSON.parse(data)) {
+					results.push(<Result symbol={stock["symbol"]} price={stock["price"]} />)
+					results.push(<br />)
+				}
+				this.setState({
+					allStocks: this.state.allStocks,
+					results: results,
+					lastCacheRefresh: this.state.lastCacheRefresh
+				});
+			})
 	}
 	
 	render() {
@@ -57,18 +80,10 @@ class App extends React.Component<MyProps, MyState> {
 						</Title>
 						<br />
 						<Container>
-							<Field kind="addons">
-								<Control expanded>
-									<Input type="search" size="large" placeholder="Search for a stock's symbol..." />
-								</Control>
-								<Control>
-									<Button color="dark" size="large" onClick={this.fetchAllStocks}>Submit</Button>
-								</Control>
-							</Field>
-							<Help>This searchbar uses the IEX to find its results results</Help>
+							<Searchbar fetchStocks={this.fetchStocks}/>
 						</Container>
 						<Container>
-							{this.state.allStocks}
+							{this.state.results}
 						</Container>
 					</Hero.Body>
 				</Hero>
