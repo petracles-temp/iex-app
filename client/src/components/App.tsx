@@ -1,6 +1,6 @@
 import React from 'react';
 import "rbx/index.css";
-import { Hero, Section, Container, Title, Field, Control, Input, Button, Help, Box, Column } from "rbx";
+import { Hero, Section, Container, Title, Footer} from "rbx";
 import Searchbar from './Searchbar';
 import Result from './Result';
 
@@ -36,7 +36,7 @@ class App extends React.Component<MyProps, MyState> {
             .then(response => response.json())
             .then(data => {
                 for (let stock of JSON.parse(data)) {
-					allStocks.set(stock["symbol"], stock["price"]);
+					allStocks.set(stock["symbol"], stock["lastSalePrice"]);
 				}
 				this.setState({
 					allStocks: allStocks,
@@ -54,21 +54,25 @@ class App extends React.Component<MyProps, MyState> {
 			lastCacheRefresh: this.state.lastCacheRefresh
 		});
 
-		// Don't do nothin' if it's an empty query
 		if (query === undefined || query.length == 0) {
 			console.log("EMPTY QUERY")
 			return
 		}
 
-		// Otherwise, query the symbol(s) and build the results
 		let results: JSX.Element[] = [];
 		fetch("http://localhost:8081/" + query)
             .then(response => response.json())
             .then(data => {
+				let i = 0
                 for (let stock of JSON.parse(data)) {
-					// Use the distinct "symbol" & "price" for distinct keys in the results array
-					results.push(<Result key={stock["symbol"]} symbol={stock["symbol"]} price={stock["price"]} />)
-					results.push(<br key={stock["price"]} />)
+					results.push(
+						<Result
+							key={i++}
+							symbol={stock["symbol"]}
+							lastSalePrice={stock["lastSalePrice"]}
+							lastSaleTime={stock["lastSaleTime"]}
+						/>)
+					results.push(<br key={i++} />)
 				}
 				this.setState({
 					allStocks: this.state.allStocks,
@@ -81,22 +85,32 @@ class App extends React.Component<MyProps, MyState> {
 	render() {
 		return (
 			<div>
-				<Hero size="large">
-					<Hero.Body  backgroundColor="light">
-						<Title align="center" textColor="dark">Welcome to the IEX App!</Title>
-							<Title align="center" as="h2" subtitle>
-								Use the searchbar below to query the IEX using a stock's symbol!
+				<Hero size="small">
+					<Hero.Body  backgroundColor="dark">
+						<Title align="center" textColor="light">Welcome to the IEX App!</Title>
+						<Title align="center" as="h4" subtitle textColor="white">
+							A <a href="https://github.com/petracles-temp/iex-app">small side project</a> made by Jack Kelly
 						</Title>
-						<br />
-						<Container>
-							<Searchbar fetchStocks={this.fetchStocks}/>
-						</Container>
-						<br />
-						<Container>
-							{this.state.results}
-						</Container>
 					</Hero.Body>
 				</Hero>
+				<Section size="medium" backgroundColor="light">
+					<Container>
+						<Title textColor="dark">Query the IEX:</Title>
+						<Searchbar fetchStocks={this.fetchStocks}/>
+					</Container>
+					<br />
+					<Container>
+						{this.state.results}
+					</Container>
+				</Section>
+				<Footer backgroundColor="light">
+					<Container>
+						<Title size={6}>
+							Data provided for free by <a href="https://iextrading.com/developer/">IEX</a>.
+							View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use.</a>
+						</Title>
+					</Container>
+				</Footer>
 			</div>
 		);
 	}

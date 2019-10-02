@@ -33,13 +33,16 @@ class Searchbar extends React.Component<MyProps, MyState> {
 			<div>
                 <Field kind="addons">
                     <Control expanded>
-                        <Input type="search" size="large" placeholder="Search for a stock's symbol..." onChange={this.handleChange} />
+                        <Input type="search" size="large" placeholder="Enter a stock's symbol..." onChange={this.handleChange} />
                     </Control>
                     <Control>
-                        <Button color="dark" size="large" onClick={() => this.props.fetchStocks(this.state.query)}>Submit</Button>
+                        <Button color="dark" size="large" onClick={() => this.props.fetchStocks(this.state.query)}>Search</Button>
                     </Control>
                 </Field>
-                <Help>This query only accepts <a href="https://iextrading.com/trading/eligible-symbols/">valid, eligible symbols</a> as per the IEX website</Help>
+                <Help>
+                    Query multiple symbols using "," and note that
+                    this searchbar only accepts <a href="https://iextrading.com/trading/eligible-symbols/">valid, eligible symbols</a> as per the IEX website
+                </Help>
 			</div>
 		);
 	}

@@ -4,12 +4,14 @@ import { Box } from "rbx";
 
 interface MyProps {
     symbol?: string;
-    price?: number;
+    lastSalePrice?: number;
+    lastSaleTime?: number;
 }
 
 interface MyState {
     symbol?: string;
-    price?: number;
+    lastSalePrice?: number;
+    lastSaleTime?: number;
 }
 
 class Result extends React.Component<MyProps, MyState> {
@@ -17,7 +19,8 @@ class Result extends React.Component<MyProps, MyState> {
         super(props);
         this.state = {
             symbol: this.props.symbol,
-            price: this.props.price,
+            lastSalePrice: this.props.lastSalePrice,
+            lastSaleTime: this.props.lastSaleTime
         };
     }
 
@@ -25,10 +28,11 @@ class Result extends React.Component<MyProps, MyState> {
         return (
             <div>
                 <Box>
-                    <p>
-                        <strong>{this.state.symbol}</strong> <br />
-                        Price: ${this.state.price}
-                    </p>
+                    <strong>{this.state.symbol}</strong>
+                    <ul>
+                        <li>Last sale price: ${this.state.lastSalePrice}</li>
+                        <li>Last sale time: {new Date(this.state.lastSaleTime).toLocaleString()}</li>
+                    </ul>
                 </Box>
             </div>
         );
