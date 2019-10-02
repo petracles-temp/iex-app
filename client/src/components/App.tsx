@@ -87,8 +87,8 @@ class App extends React.Component<MyProps, MyState> {
 			<div>
 				<Hero size="small">
 					<Hero.Body  backgroundColor="dark">
-						<Title align="center" textColor="light">Welcome to the IEX App!</Title>
-						<Title align="center" as="h4" subtitle textColor="white">
+						<Title align="left" textColor="light">Welcome to the IEX App!</Title>
+						<Title align="left" as="h4" subtitle textColor="white">
 							A <a href="https://github.com/petracles-temp/iex-app">small side project</a> made by Jack Kelly
 						</Title>
 					</Hero.Body>
