@@ -6,13 +6,13 @@ import Result from './Result';
 
 interface MyProps {
 	allStocks?: Map<string, number>,
-	results?: Result[];
+	results?: JSX.Element[];
     lastCacheRefresh?: number;
 }
 
 interface MyState {
 	allStocks?: Map<string, number>,
-    results?: Result[];
+    results?: JSX.Element[];
     lastCacheRefresh?: number;
 }
 
@@ -36,7 +36,7 @@ class App extends React.Component<MyProps, MyState> {
             .then(response => response.json())
             .then(data => {
                 for (let stock of JSON.parse(data)) {
-					allStocks.set(stock["symbol"], stock["price"])
+					allStocks.set(stock["symbol"], stock["price"]);
 				}
 				this.setState({
 					allStocks: allStocks,
@@ -47,19 +47,28 @@ class App extends React.Component<MyProps, MyState> {
 	}
 
 	fetchStocks(query: string) {
+		// Empty the current results
 		this.setState({
 			allStocks: this.state.allStocks,
 			results: [],
 			lastCacheRefresh: this.state.lastCacheRefresh
 		});
 
-		let results: Result[] = [];
+		// Don't do nothin' if it's an empty query
+		if (query === undefined || query.length == 0) {
+			console.log("EMPTY QUERY")
+			return
+		}
+
+		// Otherwise, query the symbol(s) and build the results
+		let results: JSX.Element[] = [];
 		fetch("http://localhost:8081/" + query)
             .then(response => response.json())
             .then(data => {
                 for (let stock of JSON.parse(data)) {
-					results.push(<Result symbol={stock["symbol"]} price={stock["price"]} />)
-					results.push(<br />)
+					// Use the distinct "symbol" & "price" for distinct keys in the results array
+					results.push(<Result key={stock["symbol"]} symbol={stock["symbol"]} price={stock["price"]} />)
+					results.push(<br key={stock["price"]} />)
 				}
 				this.setState({
 					allStocks: this.state.allStocks,
@@ -82,6 +91,7 @@ class App extends React.Component<MyProps, MyState> {
 						<Container>
 							<Searchbar fetchStocks={this.fetchStocks}/>
 						</Container>
+						<br />
 						<Container>
 							{this.state.results}
 						</Container>

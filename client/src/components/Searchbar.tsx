@@ -1,6 +1,6 @@
 import React from 'react';
 import "rbx/index.css";
-import { Field, Control, Input, Button, Help } from "rbx";
+import { Field, Control, Label, Input, Help, Button } from "rbx";
 
 interface MyProps {
     fetchStocks?: any;
@@ -22,7 +22,7 @@ class Searchbar extends React.Component<MyProps, MyState> {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(event) {
+    handleChange(event: any) {
         this.setState({
             query: event.target.value
         });
@@ -39,7 +39,7 @@ class Searchbar extends React.Component<MyProps, MyState> {
                         <Button color="dark" size="large" onClick={() => this.props.fetchStocks(this.state.query)}>Submit</Button>
                     </Control>
                 </Field>
-                <Help>This searchbar uses the IEX to find its results results</Help>
+                <Help>This query only accepts <a href="https://iextrading.com/trading/eligible-symbols/">valid, eligible symbols</a> as per the IEX website</Help>
 			</div>
 		);
 	}
